@@ -1,0 +1,48 @@
+//     ____       ____     ____    ____            _       _   
+//    / ___|___  / ___|___/ ___|  / ___|  ___ _ __(_)_ __ | |_ 
+//   | |   / _ \| |   / _ \___ \  \___ \ / __| '__| | '_ \| __|
+//   | |__| (_) | |__| (_) |__) |  ___) | (__| |  | | |_) | |_ 
+//    \____\___/ \____\___/____/  |____/ \___|_|  |_| .__/ \__|
+//                                                  |_|        
+// ---------------------------------------------------------------------
+//   License    : Open Source / GNU
+//   Created by : Concera Software / AH
+// ---------------------------------------------------------------------
+
+$dateTime   = new DateTime();
+$timezone   = "NL";
+$tagPrefix  = "datetime_".$timezone."_";
+$now        = date('Y-m-d');
+
+// configure in an arry which dates must be checked. Use the tag
+// name that is used glued to the tagPrefix as key and use the
+// datetime object subscription to identify the date.
+//
+$checker = [
+			"LastSundayOfTheMonth"=>"last sunday of this month",
+			"FirstSundayOfTheMonth"=>"first sunday of this month",
+			"SecondSundayOfTheMonth"=>"second sunday of this month",
+			"ThirdSundayOfTheMonth"=>"third sunday of this month",
+			"LastSaturdayOfTheMonth"=>"last saturday of this month",
+			"LastFridayOfTheMonth"=>"last friday of this month",
+			"SecondThursdayOfTheMonth"=>"second thursday of this month",
+		];
+
+
+// get a specific last day of the month script
+//
+foreach ($checker as $tag => $day){
+	
+	// modifiy the date of the $dateTime object and fetch the formatted
+	// date and check if today is that day.
+	//
+	$dateTime->modify($day);
+	$checkdate = date('Y-m-d',strtotime($dateTime->format('Y-m-d')));
+	$dateIsToday = (($now == $checkdate)?1:0);
+	
+	// Write date of the day and if today is that day into the tags. Create the
+	// tags if they don't exist.
+	//
+	$cocos->tagSetCreate($tagPrefix.$tag."_date",$checkdate);
+	$cocos->tagSetCreate($tagPrefix.$tag,$dateIsToday,"int");
+}
