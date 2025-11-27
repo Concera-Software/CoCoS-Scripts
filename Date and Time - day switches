@@ -9,10 +9,22 @@
 //   Created by : Concera Software / AH
 // ---------------------------------------------------------------------
 
+
+// setup script cyclic every minute, but only run on 0:00
+// or call script with source 'debug', then the script will run 
+//
+if ((strtolower($source!="debug")) && (intval(date("Hi")) != 0)) return;
+
+// configure constants and declare variables.
+//
 $dateTime   = new DateTime();
 $timezone   = "NL";
 $tagPrefix  = "datetime_".$timezone."_";
 $now        = date('Y-m-d');
+
+// save date of the day
+//
+$cocos->tagSetCreate($tagPrefix."DateNow",$now);
 
 // configure in an arry which dates must be checked. Use the tag
 // name that is used glued to the tagPrefix as key and use the
@@ -27,7 +39,6 @@ $checker = [
 			"LastFridayOfTheMonth"=>"last friday of this month",
 			"SecondThursdayOfTheMonth"=>"second thursday of this month",
 		];
-
 
 // get a specific last day of the month script
 //
